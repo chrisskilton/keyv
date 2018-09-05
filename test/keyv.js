@@ -75,6 +75,20 @@ test.serial('.set(key, val, ttl) where ttl is "0" overwrites default tll option 
 	tk.reset();
 });
 
+test.serial('Keyv does not reset ttl on key if refreshTtl is "false"', async t => {
+	const startTime = Date.now();
+	tk.freeze(startTime);
+	const store = new Map();
+	const keyv = new Keyv({ store, ttl: 10000, refreshTtl: false });
+	await keyv.set('foo', 'bar');
+	t.is(await keyv.get('foo'), 'bar');
+	tk.freeze(startTime + 5000);
+	await keyv.set('foo', 'bar');
+	tk.freeze(startTime + 10001);
+	t.is(await keyv.get('foo'), undefined);
+	tk.reset();
+});
+
 test.serial('Keyv uses custom serializer when provided instead of json-buffer', async t => {
 	t.plan(3);
 	const store = new Map();

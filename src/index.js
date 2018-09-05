@@ -79,6 +79,15 @@ class Keyv extends EventEmitter {
 
 		return Promise.resolve()
 			.then(() => {
+				if (this.opts.refreshTtl === false) {
+					return store.get(key);
+				}
+			})
+			.then(data => {
+				if (this.opts.refreshTtl === false && data) {
+					return;
+				}
+
 				const expires = (typeof ttl === 'number') ? (Date.now() + ttl) : null;
 				value = { value, expires };
 				return store.set(key, this.opts.serialize(value), ttl);

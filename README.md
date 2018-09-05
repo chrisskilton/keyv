@@ -243,6 +243,13 @@ Default: `undefined`
 
 Specify an adapter to use. e.g `'redis'` or `'mongodb'`.
 
+#### options.refreshTtl
+
+Type: `Boolean`<br>
+Default: `true`
+
+If set to `false`, the ttl of a key will not get reset on every `set` if the key already exists.
+
 ### Instance
 
 Keys must always be strings. Values can be of any type.
